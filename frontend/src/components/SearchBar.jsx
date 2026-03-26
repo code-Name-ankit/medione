@@ -1,15 +1,16 @@
 import { useState } from "react";
+import "./SearchBar.css";
 
-function SearchBar({ setStores, setUserLocation }) {
+function SearchBar({ setStores, setUserLocation, setLoading }) {
   const [medicine, setMedicine] = useState("");
 
   const handleSearch = () => {
+    setLoading(true);
+
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      console.log("User Location:", lat, lng);
-      
       setUserLocation({ lat, lng });
 
       const res = await fetch("http://localhost:5000/api/search", {
@@ -22,11 +23,13 @@ function SearchBar({ setStores, setUserLocation }) {
 
       const data = await res.json();
       setStores(data);
+
+      setLoading(false);
     });
   };
 
   return (
-    <div>
+    <div className="search-box">
       <input
         type="text"
         placeholder="Search medicine..."
