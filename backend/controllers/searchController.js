@@ -51,7 +51,11 @@ export const searchMedicine = async (req, res) => {
     });
 
     // 5 km filter
-    const nearby = result.filter(item => item.distance <= 5);
+   let nearby = result.filter(item => item.distance <= 5);
+
+if (nearby.length === 0) {
+  nearby = result; // fallback
+}
 
     // sort nearest first
     nearby.sort((a, b) => a.distance - b.distance);
