@@ -1,27 +1,27 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./config/db.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
-// load env
 dotenv.config();
+connectDB();
 
 const app = express();
 
-// env variables
-const PORT = process.env.PORT || 5000;
-
-// middleware
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// DB connect
-connectDB();
-
-// route
 app.get("/", (req, res) => {
-    res.send("Hello mediOne! Server is running with DB");
+  res.send("API Running...");
 });
 
-// server start
+// Routes
+app.use("/api/search", searchRoutes);
+
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
